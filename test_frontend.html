@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Retail AI Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .chat-container { border: 1px solid #ccc; height: 400px; overflow-y: auto; padding: 10px; margin: 10px 0; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .user { background-color: #e3f2fd; text-align: right; }
+        .assistant { background-color: #f3e5f5; }
+        .input-container { display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; background-color: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #1976d2; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #c8e6c9; color: #2e7d32; }
+        .error { background-color: #ffcdd2; color: #c62828; }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Retail AI Assistant - Test Interface</h1>
+    
+    <div id="status" class="status">Testing API connection...</div>
+    
+    <div class="chat-container" id="chatContainer">
+        <div class="message assistant">
+            <strong>AI Assistant:</strong> Hello! I'm your retail AI assistant. How can I help you today?
+        </div>
+    </div>
+    
+    <div class="input-container">
+        <input type="text" id="messageInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h3>Quick Test Buttons:</h3>
+        <button onclick="testAPI()">Test API Connection</button>
+        <button onclick="testProducts()">Test Product Search</button>
+        <button onclick="testPromotions()">Test Promotions</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        
+        // Test API connection
+        async function testAPI() {
+            updateStatus('Testing API connection...', 'info');
+            try {
+                const response = await axios.post(`${API_BASE_URL}/api/chat`, {
+                    message: 'Hello, test message',
+                    channel: 'web'
+                });
+                
+                if (response.data) {
+                    updateStatus('✅ API connection successful!', 'success');
+                    addMessage('Test User', 'Hello, test message', 'user');
+                    addMessage('AI Assistant', response.data.message, 'assistant');
+                } else {
+                    updateStatus('❌ API returned empty response', 'error');
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                updateStatus(`❌ API Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test product search
+        async function testProducts() {
+            updateStatus('Testing product search...', 'info');
+            try {
+                const response = await axios.post(`${API_BASE_URL}/api/products/search`, {
+                    query: 'laptop',
+                    filters: {}
+                });
+                
+                if (response.data && response.data.products) {
+                    updateStatus(`✅ Found ${response.data.products.length} products`, 'success');
+                    addMessage('AI Assistant', `I found ${response.data.products.length} laptops for you!`, 'assistant');
+                } else {
+                    updateStatus('❌ Product search failed', 'error');
+                }
+            } catch (error) {
+                console.error('Product Search Error:', error);
+                updateStatus(`❌ Product Search Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test promotions
+        async function testPromotions() {
+            updateStatus('Testing promotions...', 'info');
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/promotions`);
+                
+                if (response.data) {
+                    updateStatus('✅ Promotions loaded successfully', 'success');
+                    addMessage('AI Assistant', 'Here are our current promotions!', 'assistant');
+                } else {
+                    updateStatus('❌ Promotions failed to load', 'error');
+                }
+            } catch (error) {
+                console.error('Promotions Error:', error);
+                updateStatus(`❌ Promotions Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Send message function
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage('You', message, 'user');
+            input.value = '';
+            
+            try {
+                const response = await axios.post(`${API_BASE_URL}/api/chat`, {
+                    message: message,
+                    channel: 'web'
+                });
+                
+                if (response.data && response.data.message) {
+                    addMessage('AI Assistant', response.data.message, 'assistant');
+                } else {
+                    addMessage('AI Assistant', 'Sorry, I didn\'t receive a proper response.', 'assistant');
+                }
+            } catch (error) {
+                console.error('Chat Error:', error);
+                addMessage('AI Assistant', 'Sorry, I\'m having trouble connecting right now.', 'assistant');
+            }
+        }
+        
+        // Add message to chat
+        function addMessage(sender, message, type) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Update status
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+        
+        // Handle enter key
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // Test API on page load
+        window.onload = function() {
+            setTimeout(testAPI, 1000);
+        };
+    </script>
+</body>
+</html>
