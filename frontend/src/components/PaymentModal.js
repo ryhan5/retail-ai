@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   CreditCardIcon,
   XMarkIcon,
   CheckCircleIcon,
   ShieldCheckIcon,
-  LockClosedIcon,
-  BanknotesIcon
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
-import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover, FaPaypal, FaGooglePay, FaApplePay } from 'react-icons/fa';
+import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover, FaPaypal, FaGooglePay } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import useStore from '../store/useStore';
 

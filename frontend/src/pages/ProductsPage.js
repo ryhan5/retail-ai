@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MagnifyingGlassIcon,
@@ -34,7 +34,7 @@ const ProductsPage = () => {
   const [activeQuickFilter, setActiveQuickFilter] = useState('all');
 
   // Expanded product data with more items and categories
-  const mockProducts = [
+  const mockProducts = useMemo(() => ([
     {
       id: 1,
       name: 'Premium Wireless Headphones',
@@ -179,7 +179,7 @@ const ProductsPage = () => {
       features: ['15W Fast Charging', 'LED Indicator', 'Non-Slip Surface'],
       inStock: true
     }
-  ];
+  ]), []);
 
   const categories = [
     { id: 'all', name: 'All Products' },
@@ -205,13 +205,9 @@ const ProductsPage = () => {
       setFilteredProducts(mockProducts);
       setLoading(false);
     }, 800);
-  }, []);
+  }, [mockProducts]);
 
-  useEffect(() => {
-    filterAndSortProducts();
-  }, [searchQuery, selectedCategory, priceRange, sortBy, activeQuickFilter, products]);
-
-  const filterAndSortProducts = () => {
+  const filterAndSortProducts = useCallback(() => {
     let filtered = [...products];
 
     // Search filter
@@ -261,7 +257,11 @@ const ProductsPage = () => {
     }
 
     setFilteredProducts(filtered);
-  };
+  }, [products, searchQuery, selectedCategory, priceRange, sortBy, activeQuickFilter]);
+
+  useEffect(() => {
+    filterAndSortProducts();
+  }, [filterAndSortProducts]);
 
   const handleAddToCart = (product) => {
     addToCart(product);

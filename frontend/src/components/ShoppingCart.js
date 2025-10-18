@@ -9,7 +9,6 @@ import {
   TagIcon
 } from '@heroicons/react/24/outline';
 import useStore from '../store/useStore';
-import { orderAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
 const ShoppingCart = () => {
@@ -20,8 +19,7 @@ const ShoppingCart = () => {
     clearCart, 
     getCartTotal, 
     getCartItemCount,
-    addMessage,
-    customerId
+    addMessage
   } = useStore();
 
   const cartTotal = getCartTotal();

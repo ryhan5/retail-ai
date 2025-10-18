@@ -9,8 +9,6 @@ import {
   UserCircleIcon,
   SunIcon,
   MoonIcon,
-  Bars3Icon,
-  XMarkIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';
 import useStore from '../store/useStore';

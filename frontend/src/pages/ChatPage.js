@@ -21,11 +21,10 @@ import ShoppingCart from '../components/ShoppingCart';
 import WelcomeScreen from '../components/WelcomeScreen';
 
 const ChatPage = () => {
-  const { 
+  const {
     initializeCustomer,
     currentChannel,
     setChannel,
-    cart,
     getCartItemCount
   } = useStore();
 

@@ -9,7 +9,6 @@ import {
   HeartIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
 import useStore from '../store/useStore';
 import { openMessagingApp } from '../config/channels';

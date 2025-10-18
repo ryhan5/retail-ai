@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   PaperAirplaneIcon,
-  UserIcon,
   SparklesIcon,
   MicrophoneIcon,
   PhotoIcon,
-  FaceSmileIcon,
   CreditCardIcon
 } from '@heroicons/react/24/outline';
 import useStore from '../store/useStore';
@@ -191,7 +189,7 @@ const ChatInterface = () => {
     });
     
     // Clear cart after successful payment
-    useStore.getState().clearCart();
+    clearCart();
     
     toast.success('Order placed successfully! Check your email for confirmation.');
     setShowPaymentModal(false);
